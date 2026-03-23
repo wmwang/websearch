@@ -3,9 +3,9 @@
 Cline Web Search Tool — 使用 Playwright headless browser 進行網路搜尋
 
 用法：
-    python .cline/tools/web_search_playwright.py "<query>"
-    python .cline/tools/web_search_playwright.py "<query>" --max-results 3
-    python .cline/tools/web_search_playwright.py "<query>" --engine brave
+    python web_search_playwright.py "<query>"
+    python web_search_playwright.py "<query>" --max-results 3
+    python web_search_playwright.py "<query>" --engine brave
 """
 
 import argparse
@@ -375,7 +375,7 @@ def format_results(query: str, results: list[dict]) -> str:
 def main():
     parser = argparse.ArgumentParser(
         description="Cline Web Search Tool — 使用 Playwright 進行網路搜尋",
-        usage='python .cline/tools/web_search_playwright.py "<query>" [OPTIONS]',
+        usage='python web_search_playwright.py "<query>" [OPTIONS]',
     )
     parser.add_argument(
         "query",
@@ -407,7 +407,7 @@ def main():
 
     if not args.query:
         print(
-            'Usage: python .cline/tools/web_search_playwright.py "<query>"',
+            'Usage: python web_search_playwright.py "<query>"',
             file=sys.stderr,
         )
         sys.exit(EXIT_USAGE)

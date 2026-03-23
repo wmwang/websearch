@@ -2,32 +2,31 @@
 
 透過 Playwright headless browser 到 Brave Search 搜尋，擷取搜尋結果供 Cline 使用。不依賴任何付費搜尋 API。
 
-## 安裝
+## 安裝相依
+
+在準備執行腳本的 Python 環境下執行：
 
 ```bash
-# 安裝 Python 相依套件
-pip install -r requirements.txt
-
-# 安裝 Playwright Chromium 瀏覽器
+pip install playwright>=1.40.0
 playwright install chromium
 ```
 
-> **前提**：Python 3.11 以上
+> **注意**：不需要進行複雜的 project install，這只是一支獨立的 Python 腳本。
 
 ## 測試執行
 
 ```bash
 # 基本搜尋
-python .cline/tools/web_search_playwright.py "Spring Boot WebClient timeout official docs"
+python skills/web-search/script/web_search_playwright.py "Playwright Python examples"
 
 # 限制回傳筆數
-python .cline/tools/web_search_playwright.py "Python asyncio tutorial" --max-results 3
+python skills/web-search/script/web_search_playwright.py "Python asyncio tutorial" --max-results 3
 
 # 指定引擎（支援 brave 和 duckduckgo）
-python .cline/tools/web_search_playwright.py "React hooks best practices" --engine brave
+python skills/web-search/script/web_search_playwright.py "React hooks best practices" --engine brave
 
-# 透過 proxy 搜尋（若在公司內部網路等受限環境）
-python .cline/tools/web_search_playwright.py "Python asyncio tutorial" --proxy "http://proxy.company.com:8080"
+# 透過 proxy 搜尋
+python skills/web-search/script/web_search_playwright.py "Python asyncio tutorial" --proxy "http://proxy.company.com:8080"
 ```
 
 ### 預期輸出
@@ -44,24 +43,22 @@ URL: https://example.com/page2
 Snippet: summary text...
 ```
 
-## Cline Skill 整合
+## 整合說明 (Skill 標準封裝)
 
-1. 將 `SKILL.md` 放到 `.cline/skills/web-search/`
-2. 將 `web_search_playwright.py` 放到 `.cline/tools/`
-3. 在 Cline 對話中，當需要查最新文件、近期資訊、外部文件時，Cline 會自動使用此 skill
+這是一個標準的 Cline / Agent Skill 資料夾結構，整包 `web-search` 可以直接 shard 給任何 Agent 使用。
+
+1. 直接將整個 `skills/web-search/` 資料夾複製或掛載給你的 LLM Agent 工作區。
+2. 將 `SKILL.md` 註冊或設定為 Agent 的 Prompt。
+3. Agent 遇到需要查網頁的時候，就會自動讀取 `SKILL.md`，並使用它隨附在 `script/` 下的 Python 腳本完成搜尋。
 
 ### 目錄結構
 
 ```
-project-root/
-├─ .cline/
-│  ├─ skills/
-│  │  └─ web-search/
-│  │     └─ SKILL.md
-│  └─ tools/
-│     └─ web_search_playwright.py
-├─ requirements.txt
-└─ README_web_search.md
+你的專案或 Agent 統一存放 Skills 的目錄/
+└─ web-search/                  <-- 將這整包 shard/複製 出去
+   ├─ SKILL.md                  <-- 教導 AI 如何自主尋找並執行腳本
+   └─ script/
+      └─ web_search_playwright.py  <-- 隨附的執行腳本
 ```
 
 ## 錯誤碼
